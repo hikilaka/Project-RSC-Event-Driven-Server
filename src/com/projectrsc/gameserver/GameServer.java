@@ -18,8 +18,8 @@ import com.projectrsc.shared.Constants;
 
 /**
  * TODO: needs description
+ * 
  * @author Hikilaka
- *
  */
 public final class GameServer {
 

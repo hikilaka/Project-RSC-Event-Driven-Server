@@ -2,9 +2,9 @@ package com.projectrsc.gameserver.util;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
-import com.projectrsc.shared.xml.XmlNode;
-import com.projectrsc.shared.xml.XmlParser;
+import com.google.gson.stream.JsonReader;
 
 /**
  * Loads and holds all of the game's settings
@@ -45,31 +45,33 @@ public final class Settings {
 	 */
 	public static int CORES = Runtime.getRuntime().availableProcessors();
 
+	/**
+	 * Loads settings from the bootstrap
+	 */
 	public static void loadSettings() {
-		try {
-			FileInputStream fis = new FileInputStream("bootstrap.xml");
-			XmlParser parser = new XmlParser();
-			XmlNode root = parser.parse(fis);
-
-			if (!root.getName().equals("Settings")) {
-				throw new IOException("The root node name is not 'Settings'");
+		try (JsonReader reader = new JsonReader(new InputStreamReader(new FileInputStream("bootstrap.json")))) {
+			reader.beginObject();
+			while (reader.hasNext()) {
+				switch (reader.nextName()) {
+				case "name":
+					NAME = reader.nextString();
+					break;
+				case "port":
+					PORT = reader.nextInt();
+					break;
+				case "version":
+					VERSION = reader.nextInt();
+					break;
+				case "members":
+					MEMBERS = reader.nextBoolean();
+					break;
+				case "world":
+					WORLD = reader.nextInt();
+					break;
+				}
 			}
-			XmlNode node = root.getChild("name");
-			NAME = node.getValue();
-
-			node = root.getChild("port");
-			PORT = Integer.parseInt(node.getValue());
-
-			node = root.getChild("version");
-			VERSION = Integer.parseInt(node.getValue());
-
-			node = root.getChild("members");
-			MEMBERS = Boolean.parseBoolean(node.getValue());
-
-			node = root.getChild("world");
-			WORLD = Integer.parseInt(node.getValue());
-			fis.close();
-		} catch (Exception e) {
+			reader.endObject();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
