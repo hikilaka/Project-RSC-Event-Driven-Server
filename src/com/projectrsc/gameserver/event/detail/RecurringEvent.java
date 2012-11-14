@@ -1,18 +1,17 @@
 package com.projectrsc.gameserver.event.detail;
 
-import com.projectrsc.gameserver.event.Event;
-import com.projectrsc.gameserver.event.EventListener;
+import com.projectrsc.gameserver.event.TaskEvent;
 
 /**
- * An event listener that will invoke <code>run</code> every
- * time the delay has passed. The listener will be removed
+ * A <code>TaskEvent</code> that will invoke <code>run</code> every
+ * time the delay has passed. The task will be removed
  * from the game engine queue once <code>running</code> has been
  * set to <code>false</code>
  * 
  * @author Hikilaka
  *
  */
-public abstract class RecurringEvent extends EventListener<Event> {
+public abstract class RecurringEvent implements TaskEvent {
 	
 	private final int delay;
 	
@@ -21,13 +20,12 @@ public abstract class RecurringEvent extends EventListener<Event> {
 	protected boolean running = true;
 	
 	public RecurringEvent(int delay) {
-		super(null);
 		this.lastRun = System.currentTimeMillis();
 		this.delay = delay;
 	}
 
 	@Override
-	public boolean satisfy() {
+	public boolean satisfied() {
 		long now = System.currentTimeMillis();
 		return (now - lastRun) >= delay;
 	}
@@ -38,7 +36,7 @@ public abstract class RecurringEvent extends EventListener<Event> {
 	}
 
 	@Override
-	public void execute() {
+	public void handle() {
 		run();
 		lastRun = System.currentTimeMillis();
 	}

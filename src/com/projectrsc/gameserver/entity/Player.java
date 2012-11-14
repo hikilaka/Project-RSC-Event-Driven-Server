@@ -20,26 +20,11 @@ public final class Player extends LivingEntity {
 
 	private final ActionSender actionSender = new ActionSender(this);
 
-	public Player(Session session, String username, String password) {
+	protected Player(Session session, String username, String password) {
 		this.session = session;
 		this.username = username;
 		this.password = password;
 		GameServer.getInstance().getGameEngine().addEvent(pingTimeoutEvent);
-	}
-
-	@Override
-	public void onMelee(Entity target) {
-
-	}
-
-	@Override
-	public void onRange(Entity target) {
-
-	}
-
-	@Override
-	public void onMage(Entity target) {
-
 	}
 
 	public Session getSession() {

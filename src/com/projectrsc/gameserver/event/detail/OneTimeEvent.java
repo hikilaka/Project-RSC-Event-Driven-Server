@@ -1,7 +1,6 @@
 package com.projectrsc.gameserver.event.detail;
 
-import com.projectrsc.gameserver.event.Event;
-import com.projectrsc.gameserver.event.EventListener;
+import com.projectrsc.gameserver.event.TaskEvent;
 
 /**
  * An event listener that will invoke <code>run</code>
@@ -10,14 +9,10 @@ import com.projectrsc.gameserver.event.EventListener;
  * @author Hikilaka
  *
  */
-public abstract class OneTimeEvent extends EventListener<Event> {
-
-	public OneTimeEvent() {
-		super(null);
-	}
+public abstract class OneTimeEvent implements TaskEvent {
 
 	@Override
-	public boolean satisfy() {
+	public boolean satisfied() {
 		return true;
 	}
 	
@@ -27,7 +22,7 @@ public abstract class OneTimeEvent extends EventListener<Event> {
 	}
 
 	@Override
-	public void execute() {
+	public void handle() {
 		run();
 	}
 	

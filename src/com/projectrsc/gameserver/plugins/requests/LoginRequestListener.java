@@ -1,6 +1,7 @@
 package com.projectrsc.gameserver.plugins.requests;
 
 import com.projectrsc.gameserver.GameServer;
+import com.projectrsc.gameserver.entity.EntityFactory;
 import com.projectrsc.gameserver.entity.Player;
 import com.projectrsc.gameserver.event.detail.OneTimeEvent;
 import com.projectrsc.gameserver.listeners.ClientMessageListener;
@@ -57,7 +58,7 @@ public final class LoginRequestListener extends ClientMessageListener {
 				
 				//temporary
 				responseCode = (byte) (reconnecting ? 1 : 0);
-				Player player = new Player(session, username, password);
+				Player player = EntityFactory.newPlayer(session, username, password);
 				session.setAttachment(player);
 				world.registerPlayer(player); // must be done before sending world info
 				player.getActionSender().sendWorldInformation();

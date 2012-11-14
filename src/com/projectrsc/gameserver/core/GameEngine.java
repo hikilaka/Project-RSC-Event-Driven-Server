@@ -3,16 +3,15 @@ package com.projectrsc.gameserver.core;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.projectrsc.gameserver.event.Event;
-import com.projectrsc.gameserver.event.EventListener;
+import com.projectrsc.gameserver.event.TaskEvent;
 
 public final class GameEngine extends Thread {
 
 	private final Object lock = new Object();
 
-	private AtomicBoolean running = new AtomicBoolean(true);
+	private final AtomicBoolean running = new AtomicBoolean(true);
 
-	private final ConcurrentLinkedQueue<EventListener<? extends Event>> events = new ConcurrentLinkedQueue<>();
+	private final ConcurrentLinkedQueue<TaskEvent> taskEvents = new ConcurrentLinkedQueue<>();
 
 	public GameEngine() {
 		super.setDaemon(true);
@@ -22,7 +21,7 @@ public final class GameEngine extends Thread {
 	@Override
 	public void run() {
 		while (running.get()) {
-			while (events.size() == 0) {
+			while (taskEvents.size() == 0) {
 				synchronized (lock) {
 					try {
 						lock.wait();
@@ -32,18 +31,22 @@ public final class GameEngine extends Thread {
 				}
 			}
 			
-			EventListener<? extends Event> listener = events.peek();
-			if (listener.satisfy()) {
-				listener.execute();
-				if (listener.remove()) {
-					events.poll();	
+			TaskEvent taskEvent = taskEvents.peek();
+			if (taskEvent.satisfied()) {
+				taskEvent.handle();
+				if (taskEvent.remove()) {
+					taskEvents.poll();	
 				}
 			}
 		}
 	}
 
-	public void addEvent(EventListener<? extends Event> listener) {
-		events.add(listener);
+	/**
+	 * Adds a <code>TaskEvent</code> to a queue
+	 * @param taskEvent The <code>TaskEvent</code> to add
+	 */
+	public void addEvent(TaskEvent taskEvent) {
+		taskEvents.add(taskEvent);
 
 		synchronized (lock) {
 			lock.notify();

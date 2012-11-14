@@ -14,9 +14,9 @@ public abstract class LivingEntity extends Entity {
 	private final AtomicBoolean busy = new AtomicBoolean(false);
 	
 	/**
-	 * Whether or not this entity is valid
+	 * Whether or not this entity is registered
 	 */
-	private final AtomicBoolean valid = new AtomicBoolean(false);
+	private final AtomicBoolean registered = new AtomicBoolean(false);
 	
 	/**
 	 * The combat level of this entity
@@ -42,12 +42,12 @@ public abstract class LivingEntity extends Entity {
 		return busy.get();
 	}
 	
-	public void setValid(boolean valid) {
-		this.valid.set(valid);
+	public void setRegistered(boolean registered) {
+		this.registered.set(registered);
 	}
 	
-	public boolean isValid() {
-		return valid.get();
+	public boolean isRegistered() {
+		return registered.get();
 	}
 	
 	public void setCombatLevel(int combatLevel) {

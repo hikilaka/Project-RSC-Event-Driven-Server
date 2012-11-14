@@ -1,35 +1,31 @@
 package com.projectrsc.gameserver.event;
 
 /**
- * 
  * @author Hikilaka
- *
  * @param <T> The type of event this listener is for
  */
 public abstract class EventListener<T extends Event> {
-
-	protected final T event;
-
-	public EventListener(T event) {
-		this.event = event;
+	
+	private final Class<T> classType;
+	
+	public EventListener(Class<T> classType) {
+		this.classType = classType;
 	}
 
 	/**
 	 * @return Whether or not the game engine should
 	 * invoke <code>execute</code>
 	 */
-	public abstract boolean satisfy();
-
-	/**
-	 * @return Whether or not the game engine should
-	 * remove this listener from it's queue
-	 */
-	public abstract boolean remove();
+	public abstract boolean satisfied(T event);
 
 	/**
 	 * Invoked when <code>satisfy</code> returns true, when the
 	 * game engine processes this listener
 	 */
-	public abstract void execute();
+	public abstract void handle(T event);
+	
+	public Class<T> getClassType() {
+		return classType;
+	}
 
 }

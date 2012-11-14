@@ -23,7 +23,7 @@ public final class PingTimeoutListener extends RecurringEvent {
 	public void run() {
 		if ((System.currentTimeMillis() - player.getLastPing()) >= 15000) {
 			System.out.println(player.getUsername() + " has timed out!");
-			player.setValid(false);
+			player.setRegistered(false);
 			running = false;
 		}
 	}
