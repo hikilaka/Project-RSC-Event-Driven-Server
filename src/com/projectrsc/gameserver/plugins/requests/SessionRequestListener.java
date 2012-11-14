@@ -20,8 +20,7 @@ public final class SessionRequestListener extends ClientMessageListener {
 	}
 
 	@Override
-	public void onMessageReceived(final Session session, RSCPacket packet)
-			throws PacketReadException {
+	public void onMessageReceived(final Session session, RSCPacket packet) throws PacketReadException {
 		if (session.getAttachment() != null) {
 			// Already has an initialized session
 			return;

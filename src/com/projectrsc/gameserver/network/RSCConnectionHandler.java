@@ -35,10 +35,8 @@ public final class RSCConnectionHandler extends SimpleChannelHandler {
 				exception.printStackTrace();
 			}
 		} else {
-			System.out.println("Warning null packet listener! " + session + " "
-					+ packet);
+			System.out.println("Warning null packet listener! " + session + " " + packet);
 		}
-
 	}
 
 	@Override
@@ -50,14 +48,11 @@ public final class RSCConnectionHandler extends SimpleChannelHandler {
 	@Override
 	public void channelDisconnected(ChannelHandlerContext ctx,
 			ChannelStateEvent e) {
-		System.out.println("Connection disconnected from: "
-				+ ctx.getChannel().getAttachment());
+		System.out.println("Connection disconnected from: " + ctx.getChannel().getAttachment());
 		Session session = Session.class.cast(ctx.getChannel().getAttachment());
 
-		if (session.getAttachment() != null
-				&& session.getAttachment() instanceof Player) {
-			World.getWorld().unregisterPlayer(
-					session.getAttachmentAs(Player.class));
+		if (session.getAttachment() != null && session.getAttachment() instanceof Player) {
+			World.getWorld().unregisterPlayer(session.getAttachmentAs(Player.class));
 		}
 	}
 
@@ -69,8 +64,7 @@ public final class RSCConnectionHandler extends SimpleChannelHandler {
 	public void registerMessageListener(ClientMessageListener listener) {
 		for (int id : listener.getAssociatedIds()) {
 			if (messageListeners[id] != null) {
-				throw new RuntimeException(
-						"Duplicate message listeners for ID: " + id);
+				throw new RuntimeException("Duplicate message listeners for ID: " + id);
 			}
 			messageListeners[id] = listener;
 		}

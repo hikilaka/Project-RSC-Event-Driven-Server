@@ -49,8 +49,7 @@ public final class Settings {
 	 * Loads settings from the bootstrap
 	 */
 	public static void loadSettings() {
-		try (JsonReader reader = new JsonReader(new InputStreamReader(
-				new FileInputStream("bootstrap.json")))) {
+		try (JsonReader reader = new JsonReader(new InputStreamReader(new FileInputStream("bootstrap.json")))) {
 			reader.beginObject();
 			while (reader.hasNext()) {
 				switch (reader.nextName()) {

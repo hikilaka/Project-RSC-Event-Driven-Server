@@ -14,10 +14,8 @@ public final class PingListener extends ClientMessageListener {
 	}
 
 	@Override
-	public void onMessageReceived(Session session, RSCPacket packet)
-			throws PacketReadException {
-		if (session.getAttachment() == null
-				|| !(session.getAttachment() instanceof Player)) {
+	public void onMessageReceived(Session session, RSCPacket packet) throws PacketReadException {
+		if (session.getAttachment() == null || !(session.getAttachment() instanceof Player)) {
 			// Invalid time to send a ping request
 			return;
 		}

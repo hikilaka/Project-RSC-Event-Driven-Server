@@ -48,15 +48,13 @@ public final class Location {
 	public boolean withinRange(Location other, int radius) {
 		int xDifference = Math.abs(x - other.x);
 		int yDifference = Math.abs(y - other.y);
-		return xDifference <= radius && xDifference > -radius
-				&& yDifference <= radius && yDifference > -radius;
+		return xDifference <= radius && xDifference > -radius && yDifference <= radius && yDifference > -radius;
 	}
 
 	public boolean withinRange(Location other, int top, int bottom) {
 		int xDifference = Math.abs(x - other.x);
 		int yDifference = Math.abs(y - other.y);
-		return xDifference <= top && xDifference > -bottom
-				&& yDifference <= top && yDifference > -bottom;
+		return xDifference <= top && xDifference > -bottom && yDifference <= top && yDifference > -bottom;
 	}
 
 	public boolean inWilderness() {

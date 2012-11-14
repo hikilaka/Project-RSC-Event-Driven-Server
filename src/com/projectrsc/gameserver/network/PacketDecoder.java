@@ -10,8 +10,7 @@ import com.projectrsc.shared.network.Session;
 public final class PacketDecoder extends FrameDecoder {
 
 	@Override
-	protected Object decode(ChannelHandlerContext ctx, Channel channel,
-			ChannelBuffer msg) {
+	protected Object decode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer msg) {
 		try {
 			if (msg.readableBytes() >= 3) {
 				msg.markReaderIndex();
@@ -22,10 +21,8 @@ public final class PacketDecoder extends FrameDecoder {
 					byte[] payload = new byte[length - 1];
 					int id = msg.readByte() & 0xff;
 					msg.readBytes(payload);
-					RSCPacket p = new RSCPacket(Session.class.cast(channel
-							.getAttachment()), id, payload);
+					RSCPacket p = new RSCPacket(Session.class.cast(channel.getAttachment()), id, payload);
 					return p;
-
 				} else {
 					msg.resetReaderIndex();
 					return null;

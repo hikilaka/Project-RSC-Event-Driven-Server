@@ -33,10 +33,8 @@ public class PacketBuilder {
 		curLength = (bitPosition + 7) / 8;
 		ensureCapacity(curLength);
 		for (; numBits > bitOffset; bitOffset = 8) {
-			payload[bytePos] &= ~bitmasks[bitOffset]; // mask out the desired
-			// area
-			payload[bytePos++] |= (value >> (numBits - bitOffset))
-					& bitmasks[bitOffset];
+			payload[bytePos] &= ~bitmasks[bitOffset]; // mask out the desired area
+			payload[bytePos++] |= (value >> (numBits - bitOffset)) & bitmasks[bitOffset];
 
 			numBits -= bitOffset;
 		}

@@ -28,8 +28,7 @@ public abstract class Entity {
 	/**
 	 * This entity's location
 	 */
-	protected final AtomicReference<Location> location = new AtomicReference<>(
-			DEFAULT_LOCATION);
+	protected final AtomicReference<Location> location = new AtomicReference<>(DEFAULT_LOCATION);
 
 	/**
 	 * This entity's direction
@@ -37,8 +36,7 @@ public abstract class Entity {
 	protected final AtomicInteger direction = new AtomicInteger(0);
 
 	public void addEventListener(EventListener<? extends Event> listener) {
-		Set<EventListener<? extends Event>> listeners = eventListeners
-				.get(listener.getClassType());
+		Set<EventListener<? extends Event>> listeners = eventListeners.get(listener.getClassType());
 		if (listeners == null) {
 			listeners = new HashSet<>();
 			eventListeners.put(listener.getClassType(), listeners);
@@ -47,8 +45,7 @@ public abstract class Entity {
 	}
 
 	public void removeEventListener(EventListener<? extends Event> listener) {
-		Set<EventListener<? extends Event>> listeners = eventListeners
-				.get(listener.getClassType());
+		Set<EventListener<? extends Event>> listeners = eventListeners.get(listener.getClassType());
 		if (listeners != null) {
 			listeners.remove(listener);
 		}

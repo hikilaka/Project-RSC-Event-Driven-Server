@@ -1,9 +1,7 @@
 package com.projectrsc.shared.util;
 
 /**
- * Do I really need a description?
- * 
- * @author zack
+ * @author Hikilaka
  * @version 1
  * @since 0.1
  */

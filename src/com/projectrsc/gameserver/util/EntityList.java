@@ -16,8 +16,7 @@ public final class EntityList<T extends Entity> extends AbstractCollection<T> {
 
 	protected volatile Object[] entities;
 
-	protected final Set<Integer> indicies = Collections
-			.synchronizedSet(new HashSet<Integer>());
+	protected final Set<Integer> indicies = Collections.synchronizedSet(new HashSet<Integer>());
 
 	public EntityList() {
 		this(DEFAULT_CAPACITY);

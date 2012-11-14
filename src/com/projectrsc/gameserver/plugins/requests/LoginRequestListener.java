@@ -27,14 +27,13 @@ public final class LoginRequestListener extends ClientMessageListener {
 	}
 
 	@Override
-	public void onMessageReceived(final Session session, RSCPacket packet)
-			throws PacketReadException {
-		if (session.getAttachment() == null
-				|| !(session.getAttachment() instanceof Long)) {
+	public void onMessageReceived(final Session session, RSCPacket packet) throws PacketReadException {
+		if (session.getAttachment() == null || !(session.getAttachment() instanceof Long)) {
 			// They are requesting to login without a session request
 			// or they're requesting to login after already logging in
 			return;
 		}
+
 		// The login packet is encrypted with RSA
 		byte[] decryptedData = decryptor.decrypt(packet.getData());
 		final Packet decryptedPacket = new Packet(session, decryptedData);
@@ -61,11 +60,9 @@ public final class LoginRequestListener extends ClientMessageListener {
 
 				// temporary
 				responseCode = (byte) (reconnecting ? 1 : 0);
-				Player player = EntityFactory.newPlayer(session, username,
-						password);
+				Player player = EntityFactory.newPlayer(session, username, password);
 				session.setAttachment(player);
-				world.registerPlayer(player); // must be done before sending
-												// world info
+				world.registerPlayer(player); // must be done before sending world info
 				player.getActionSender().sendWorldInformation();
 				player.fireEvent(new LoginAcceptedEvent(player));
 				// end of temp code
