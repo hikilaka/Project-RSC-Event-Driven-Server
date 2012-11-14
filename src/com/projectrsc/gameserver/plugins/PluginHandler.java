@@ -1,23 +1,22 @@
 package com.projectrsc.gameserver.plugins;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import com.projectrsc.gameserver.GameServer;
+import com.projectrsc.gameserver.event.Event;
+import com.projectrsc.gameserver.event.EventListener;
 import com.projectrsc.gameserver.listeners.ClientMessageListener;
-import com.projectrsc.gameserver.plugins.listeners.PingListener;
-import com.projectrsc.gameserver.plugins.requests.LoginRequestListener;
-import com.projectrsc.gameserver.plugins.requests.SessionRequestListener;
 
 public final class PluginHandler {
 
@@ -26,23 +25,52 @@ public final class PluginHandler {
 	public static PluginHandler getInstance() {
 		return INSTANCE;
 	}
+	
+	/**
+	 * Listeners that will be applied to every player upon logging in
+	 */
+	private final Set<EventListener<? extends Event>> playerEventListeners = new HashSet<>();
 
 	public void loadPlugins() {
-		//loadPacketListeners(); TODO: fix dis shit..
-		GameServer.getInstance().getConnectionHandler().registerMessageListener(new SessionRequestListener());
-		GameServer.getInstance().getConnectionHandler().registerMessageListener(new LoginRequestListener());
-		GameServer.getInstance().getConnectionHandler().registerMessageListener(new PingListener());
+		loadPacketListeners();
+		loadPlayerEventListeners();
+	}
+	
+	public Set<EventListener<? extends Event>> getPlayerEventListeners() {
+		return playerEventListeners;
 	}
 
 	private void loadPacketListeners() {
 		try {
-			List<Class<?>> listeners = loadClasses("com.projectrsc.gameserver.plugins.requests");
-			for (Class<?> clazz : listeners) {
-				Object instance = clazz.newInstance();
+			List<Class<?>> requestListeners = loadClasses("com.projectrsc.gameserver.plugins.requests");
+			List<Class<?>> actionListeners = loadClasses("com.projectrsc.gameserver.plugins.listeners");
+			registerPacketListeners(requestListeners);
+			registerPacketListeners(actionListeners);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void registerPacketListeners(List<Class<?>> listeners) throws Exception {
+		for (Class<?> c : listeners) {
+			Object instance = c.newInstance();
 
-				if (instance instanceof ClientMessageListener) {
-					ClientMessageListener listener = ClientMessageListener.class.cast(instance);
-					GameServer.getInstance().getConnectionHandler().registerMessageListener(listener);
+			if (instance instanceof ClientMessageListener) {
+				ClientMessageListener listener = ClientMessageListener.class.cast(instance);
+				GameServer.getInstance().getConnectionHandler().registerMessageListener(listener);
+			}
+		}
+	}
+	
+	private void loadPlayerEventListeners() {
+		try {
+			List<Class<?>> playerListeners = loadClasses("com.projectrsc.gameserver.plugins.listeners.player");
+			for (Class<?> c : playerListeners) {
+				Object instance = c.newInstance();
+
+				if (instance instanceof EventListener) {
+					EventListener<?> listener = EventListener.class.cast(instance);
+					playerEventListeners.add(listener);
 				}
 			}
 		} catch (Exception e) {
@@ -54,11 +82,9 @@ public final class PluginHandler {
 		List<Class<?>> classes = new ArrayList<Class<?>>();
 		ArrayList<File> directories = new ArrayList<File>();
 		try {
-			ClassLoader cld = Thread.currentThread().getContextClassLoader();
-			if (cld == null) {
-				throw new ClassNotFoundException("Can't get class loader.");
-			}
-			Enumeration<URL> resources = cld.getResources(pckgname.replace('.', '/'));
+			ClassLoader classLoader = PluginHandler.class.getClassLoader();
+			Enumeration<URL> resources = classLoader.getResources(pckgname.replace('.', '/'));
+			
 			while (resources.hasMoreElements()) {
 				URL res = resources.nextElement();
 				if (res.getProtocol().equalsIgnoreCase("jar")) {
@@ -74,19 +100,15 @@ public final class PluginHandler {
 					directories.add(new File(URLDecoder.decode(res.getPath(), "UTF-8")));
 				}
 			}
-		} catch (NullPointerException x) {
-			throw new ClassNotFoundException(pckgname + " does not appear to be a valid package (Null pointer exception)");
-		} catch (UnsupportedEncodingException encex) {
-			throw new ClassNotFoundException(pckgname + " does not appear to be a valid package (Unsupported encoding)");
-		} catch (IOException ioex) {
-			throw new ClassNotFoundException("IOException was thrown when trying to get all resources for " + pckgname);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		for (File directory : directories) {
 			if (directory.exists()) {
 				String[] files = directory.list();
 				for (String file : files) {
-					if (file.endsWith(".class")) {
+					if (file.endsWith(".class") && !file.contains("$")) {
 						classes.add(Class.forName(pckgname + '.' + file.substring(0, file.length() - 6)));
 					}
 				}

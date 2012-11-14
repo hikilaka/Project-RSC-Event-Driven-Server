@@ -2,8 +2,6 @@ package com.projectrsc.gameserver.entity;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.projectrsc.gameserver.GameServer;
-import com.projectrsc.gameserver.listeners.PingTimeoutListener;
 import com.projectrsc.gameserver.model.ActionSender;
 import com.projectrsc.gameserver.model.World;
 import com.projectrsc.shared.network.Session;
@@ -16,15 +14,12 @@ public final class Player extends LivingEntity {
 
 	private final AtomicLong lastPing = new AtomicLong(System.currentTimeMillis());
 
-	private final PingTimeoutListener pingTimeoutEvent = new PingTimeoutListener(this);
-
 	private final ActionSender actionSender = new ActionSender(this);
 
 	protected Player(Session session, String username, String password) {
 		this.session = session;
 		this.username = username;
 		this.password = password;
-		GameServer.getInstance().getGameEngine().addEvent(pingTimeoutEvent);
 	}
 
 	public Session getSession() {

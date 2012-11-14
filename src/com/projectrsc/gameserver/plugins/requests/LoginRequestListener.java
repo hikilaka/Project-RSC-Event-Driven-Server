@@ -4,6 +4,7 @@ import com.projectrsc.gameserver.GameServer;
 import com.projectrsc.gameserver.entity.EntityFactory;
 import com.projectrsc.gameserver.entity.Player;
 import com.projectrsc.gameserver.event.detail.OneTimeEvent;
+import com.projectrsc.gameserver.event.impl.LoginAcceptedEvent;
 import com.projectrsc.gameserver.listeners.ClientMessageListener;
 import com.projectrsc.gameserver.model.World;
 import com.projectrsc.gameserver.network.RSCPacket;
@@ -62,6 +63,7 @@ public final class LoginRequestListener extends ClientMessageListener {
 				session.setAttachment(player);
 				world.registerPlayer(player); // must be done before sending world info
 				player.getActionSender().sendWorldInformation();
+				player.fireEvent(new LoginAcceptedEvent(player));
 				//end of temp code
 				
 				if (responseCode != -1) {

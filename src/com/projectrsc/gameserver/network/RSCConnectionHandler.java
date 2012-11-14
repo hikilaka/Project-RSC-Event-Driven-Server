@@ -20,9 +20,9 @@ import com.projectrsc.shared.network.Session;
  * @since 0.1
  */
 public final class RSCConnectionHandler extends SimpleChannelHandler {
-	
+
 	private final ClientMessageListener[] messageListeners = new ClientMessageListener[256];
-	
+
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
 		Session session = Session.class.cast(ctx.getChannel().getAttachment());
@@ -37,30 +37,30 @@ public final class RSCConnectionHandler extends SimpleChannelHandler {
 		} else {
 			System.out.println("Warning null packet listener! " + session + " " + packet);
 		}
-		
+
 	}
-	
+
 	@Override
 	public void channelOpen(ChannelHandlerContext ctx, ChannelStateEvent e) {
 		Session session = new Session(ctx.getChannel());
 		System.out.println("New connection from: " + session);
 	}
-	
+
 	@Override
 	public void channelDisconnected(ChannelHandlerContext ctx, ChannelStateEvent e) {
 		System.out.println("Connection disconnected from: " + ctx.getChannel().getAttachment());
 		Session session = Session.class.cast(ctx.getChannel().getAttachment());
-		
+
 		if (session.getAttachment() != null && session.getAttachment() instanceof Player) {
 			World.getWorld().unregisterPlayer(session.getAttachmentAs(Player.class));
 		}
 	}
-	
+
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
 		e.getCause().printStackTrace();
 	}
-	
+
 	public void registerMessageListener(ClientMessageListener listener) {
 		for (int id : listener.getAssociatedIds()) {
 			if (messageListeners[id] != null) {
@@ -69,5 +69,5 @@ public final class RSCConnectionHandler extends SimpleChannelHandler {
 			messageListeners[id] = listener;
 		}
 	}
-	
+
 }

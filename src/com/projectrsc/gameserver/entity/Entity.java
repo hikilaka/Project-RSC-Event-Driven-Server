@@ -35,34 +35,34 @@ public abstract class Entity {
 	 */
 	protected final AtomicInteger direction = new AtomicInteger(0);
 
-	public void addEventListener(EventListener<? extends Event> listener) {
-		Set<EventListener<? extends Event>> listeners = eventListeners.get(listener.getClassType());
-		if (listeners == null) {
-			listeners = new HashSet<>();
-			eventListeners.put(listener.getClassType(), listeners);
-		}
-		listeners.add(listener);
+public void addEventListener(EventListener<? extends Event> listener) {
+	Set<EventListener<? extends Event>> listeners = eventListeners.get(listener.getClassType());
+	if (listeners == null) {
+		listeners = new HashSet<>();
+		eventListeners.put(listener.getClassType(), listeners);
 	}
+	listeners.add(listener);
+}
 
-	public void removeEventListener(EventListener<? extends Event> listener) {
-		Set<EventListener<? extends Event>> listeners = eventListeners.get(listener.getClassType());
-		if (listeners != null) {
-			listeners.remove(listener);
-		}
+public void removeEventListener(EventListener<? extends Event> listener) {
+	Set<EventListener<? extends Event>> listeners = eventListeners.get(listener.getClassType());
+	if (listeners != null) {
+		listeners.remove(listener);
 	}
+}
 
-	@SuppressWarnings("unchecked")
-	public synchronized <T extends Event> void fireEvent(T event) {
-		Set<EventListener<?>> listeners = eventListeners.get(event.getClass());
-		if (listeners != null) {
-			for (EventListener<? extends Event> listener : listeners) {
-				EventListener<T> eventListener = (EventListener<T>) listener;
-				if (eventListener.satisfied(event)) {
-					eventListener.handle(event);
-				}
+@SuppressWarnings("unchecked")
+public synchronized <T extends Event> void fireEvent(T event) {
+	Set<EventListener<?>> listeners = eventListeners.get(event.getClass());
+	if (listeners != null) {
+		for (EventListener<? extends Event> listener : listeners) {
+			EventListener<T> eventListener = (EventListener<T>) listener;
+			if (eventListener.satisfied(event)) {
+				eventListener.handle(event);
 			}
 		}
 	}
+}
 
 	public void setIndex(int index) {
 		this.index.set(index);
