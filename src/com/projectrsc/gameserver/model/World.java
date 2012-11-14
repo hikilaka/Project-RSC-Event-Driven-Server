@@ -12,7 +12,7 @@ public final class World {
 	}
 
 	private final EntityList<Player> players = new EntityList<>();
-	
+
 	public void registerPlayer(Player player) {
 		player.setRegistered(true);
 		player.loadSurroundingEntities();

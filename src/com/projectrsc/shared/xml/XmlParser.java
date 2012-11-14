@@ -13,8 +13,8 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
- * A simple XML parser which uses the internal {@link org.xml.sax} API to
- * create a tree of {@link XmlNode} objects.
+ * A simple XML parser which uses the internal {@link org.xml.sax} API to create
+ * a tree of {@link XmlNode} objects.
  */
 public final class XmlParser {
 
@@ -24,7 +24,8 @@ public final class XmlParser {
 	private final class XmlHandler extends DefaultHandler {
 
 		@Override
-		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+		public void startElement(String uri, String localName, String qName,
+				Attributes attributes) throws SAXException {
 			XmlNode next = new XmlNode(localName);
 
 			if (rootNode == null) {
@@ -39,20 +40,23 @@ public final class XmlParser {
 				int attributeCount = attributes.getLength();
 				for (int i = 0; i < attributeCount; i++) {
 					String attribLocalName = attributes.getLocalName(i);
-					currentNode.setAttribute(attribLocalName, attributes.getValue(i));
+					currentNode.setAttribute(attribLocalName,
+							attributes.getValue(i));
 				}
 			}
 		}
 
 		@Override
-		public void endElement(String uri, String localName, String qName) throws SAXException {
+		public void endElement(String uri, String localName, String qName)
+				throws SAXException {
 			if (!nodeStack.isEmpty()) {
 				currentNode = nodeStack.pop();
 			}
 		}
 
 		@Override
-		public void characters(char[] ch, int start, int length) throws SAXException {
+		public void characters(char[] ch, int start, int length)
+				throws SAXException {
 			currentNode.setValue(new String(ch, start, length));
 		}
 
@@ -86,7 +90,9 @@ public final class XmlParser {
 
 	/**
 	 * Creates a new xml parser.
-	 * @throws SAXException if a SAX error occurs.
+	 * 
+	 * @throws SAXException
+	 *             if a SAX error occurs.
 	 */
 	public XmlParser() throws SAXException {
 		xmlReader = XMLReaderFactory.createXMLReader();
@@ -106,10 +112,14 @@ public final class XmlParser {
 
 	/**
 	 * Parses XML data from the given {@link InputStream}.
-	 * @param is The {@link InputStream}.
+	 * 
+	 * @param is
+	 *            The {@link InputStream}.
 	 * @return The root {@link XmlNode}.
-	 * @throws IOException if an I/O error occurs.
-	 * @throws SAXException if a SAX error occurs.
+	 * @throws IOException
+	 *             if an I/O error occurs.
+	 * @throws SAXException
+	 *             if a SAX error occurs.
 	 */
 	public XmlNode parse(InputStream is) throws IOException, SAXException {
 		synchronized (this) {
@@ -119,10 +129,14 @@ public final class XmlParser {
 
 	/**
 	 * Parses XML data from the given {@link Reader}.
-	 * @param reader The {@link Reader}.
+	 * 
+	 * @param reader
+	 *            The {@link Reader}.
 	 * @return The root {@link XmlNode}.
-	 * @throws IOException if an I/O error occurs.
-	 * @throws SAXException if a SAX error occurs.
+	 * @throws IOException
+	 *             if an I/O error occurs.
+	 * @throws SAXException
+	 *             if a SAX error occurs.
 	 */
 	public XmlNode parse(Reader reader) throws IOException, SAXException {
 		synchronized (this) {
@@ -132,10 +146,14 @@ public final class XmlParser {
 
 	/**
 	 * Parses XML data from the {@link InputSource}.
-	 * @param source The {@link InputSource}.
+	 * 
+	 * @param source
+	 *            The {@link InputSource}.
 	 * @return The root {@link XmlNode}.
-	 * @throws IOException if an I/O error occurs.
-	 * @throws SAXException if a SAX error occurs.
+	 * @throws IOException
+	 *             if an I/O error occurs.
+	 * @throws SAXException
+	 *             if a SAX error occurs.
 	 */
 	private XmlNode parse(InputSource source) throws IOException, SAXException {
 		rootNode = null;

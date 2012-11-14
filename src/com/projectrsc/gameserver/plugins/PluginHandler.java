@@ -25,7 +25,7 @@ public final class PluginHandler {
 	public static PluginHandler getInstance() {
 		return INSTANCE;
 	}
-	
+
 	/**
 	 * Listeners that will be applied to every player upon logging in
 	 */
@@ -35,7 +35,7 @@ public final class PluginHandler {
 		loadPacketListeners();
 		loadPlayerEventListeners();
 	}
-	
+
 	public Set<EventListener<? extends Event>> getPlayerEventListeners() {
 		return playerEventListeners;
 	}
@@ -50,18 +50,21 @@ public final class PluginHandler {
 			e.printStackTrace();
 		}
 	}
-	
-	private void registerPacketListeners(List<Class<?>> listeners) throws Exception {
+
+	private void registerPacketListeners(List<Class<?>> listeners)
+			throws Exception {
 		for (Class<?> c : listeners) {
 			Object instance = c.newInstance();
 
 			if (instance instanceof ClientMessageListener) {
-				ClientMessageListener listener = ClientMessageListener.class.cast(instance);
-				GameServer.getInstance().getConnectionHandler().registerMessageListener(listener);
+				ClientMessageListener listener = ClientMessageListener.class
+						.cast(instance);
+				GameServer.getInstance().getConnectionHandler()
+						.registerMessageListener(listener);
 			}
 		}
 	}
-	
+
 	private void loadPlayerEventListeners() {
 		try {
 			List<Class<?>> playerListeners = loadClasses("com.projectrsc.gameserver.plugins.listeners.player");
@@ -69,7 +72,8 @@ public final class PluginHandler {
 				Object instance = c.newInstance();
 
 				if (instance instanceof EventListener) {
-					EventListener<?> listener = EventListener.class.cast(instance);
+					EventListener<?> listener = EventListener.class
+							.cast(instance);
 					playerEventListeners.add(listener);
 				}
 			}
@@ -78,26 +82,33 @@ public final class PluginHandler {
 		}
 	}
 
-	private List<Class<?>> loadClasses(String pckgname) throws ClassNotFoundException {
+	private List<Class<?>> loadClasses(String pckgname)
+			throws ClassNotFoundException {
 		List<Class<?>> classes = new ArrayList<Class<?>>();
 		ArrayList<File> directories = new ArrayList<File>();
 		try {
 			ClassLoader classLoader = PluginHandler.class.getClassLoader();
-			Enumeration<URL> resources = classLoader.getResources(pckgname.replace('.', '/'));
-			
+			Enumeration<URL> resources = classLoader.getResources(pckgname
+					.replace('.', '/'));
+
 			while (resources.hasMoreElements()) {
 				URL res = resources.nextElement();
 				if (res.getProtocol().equalsIgnoreCase("jar")) {
-					JarURLConnection conn = (JarURLConnection) res.openConnection();
+					JarURLConnection conn = (JarURLConnection) res
+							.openConnection();
 					JarFile jar = conn.getJarFile();
 					for (JarEntry e : Collections.list(jar.entries())) {
-						if (e.getName().startsWith(pckgname.replace('.', '/')) && e.getName().endsWith(".class") && !e.getName().contains("$")) {
-							String className = e.getName().replace("/",".").substring(0,e.getName().length() - 6);
+						if (e.getName().startsWith(pckgname.replace('.', '/'))
+								&& e.getName().endsWith(".class")
+								&& !e.getName().contains("$")) {
+							String className = e.getName().replace("/", ".")
+									.substring(0, e.getName().length() - 6);
 							classes.add(Class.forName(className));
 						}
 					}
 				} else {
-					directories.add(new File(URLDecoder.decode(res.getPath(), "UTF-8")));
+					directories.add(new File(URLDecoder.decode(res.getPath(),
+							"UTF-8")));
 				}
 			}
 		} catch (Exception e) {
@@ -109,11 +120,14 @@ public final class PluginHandler {
 				String[] files = directory.list();
 				for (String file : files) {
 					if (file.endsWith(".class") && !file.contains("$")) {
-						classes.add(Class.forName(pckgname + '.' + file.substring(0, file.length() - 6)));
+						classes.add(Class.forName(pckgname + '.'
+								+ file.substring(0, file.length() - 6)));
 					}
 				}
 			} else {
-				throw new ClassNotFoundException(pckgname + " (" + directory.getPath() + ") does not appear to be a valid package");
+				throw new ClassNotFoundException(pckgname + " ("
+						+ directory.getPath()
+						+ ") does not appear to be a valid package");
 			}
 		}
 		return classes;

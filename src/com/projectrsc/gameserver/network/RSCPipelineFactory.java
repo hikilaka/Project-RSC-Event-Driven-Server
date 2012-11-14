@@ -5,13 +5,13 @@ import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 
 public final class RSCPipelineFactory implements ChannelPipelineFactory {
-	
+
 	private final PacketDecoder decoder = new PacketDecoder();
-	
+
 	private final PacketEncoder encoder = new PacketEncoder();
-	
+
 	private final RSCConnectionHandler handler;
-	
+
 	public RSCPipelineFactory(RSCConnectionHandler handler) {
 		this.handler = handler;
 	}

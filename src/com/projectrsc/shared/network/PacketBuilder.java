@@ -2,14 +2,11 @@ package com.projectrsc.shared.network;
 
 public class PacketBuilder {
 
-	private final static int bitmasks[] = {
-		0, 0x1, 0x3, 0x7, 0xf, 0x1f, 0x3f, 0x7f,
-		0xff, 0x1ff, 0x3ff, 0x7ff, 0xfff, 0x1fff,
-		0x3fff, 0x7fff, 0xffff, 0x1ffff, 0x3ffff,
-		0x7ffff, 0xfffff, 0x1fffff, 0x3fffff, 0x7fffff,
-		0xffffff, 0x1ffffff, 0x3ffffff, 0x7ffffff, 0xfffffff,
-		0x1fffffff, 0x3fffffff, 0x7fffffff, -1
-	};
+	private final static int bitmasks[] = { 0, 0x1, 0x3, 0x7, 0xf, 0x1f, 0x3f,
+			0x7f, 0xff, 0x1ff, 0x3ff, 0x7ff, 0xfff, 0x1fff, 0x3fff, 0x7fff,
+			0xffff, 0x1ffff, 0x3ffff, 0x7ffff, 0xfffff, 0x1fffff, 0x3fffff,
+			0x7fffff, 0xffffff, 0x1ffffff, 0x3ffffff, 0x7ffffff, 0xfffffff,
+			0x1fffffff, 0x3fffffff, 0x7fffffff, -1 };
 
 	private static final int DEFAULT_SIZE = 32;
 
@@ -38,7 +35,8 @@ public class PacketBuilder {
 		for (; numBits > bitOffset; bitOffset = 8) {
 			payload[bytePos] &= ~bitmasks[bitOffset]; // mask out the desired
 			// area
-			payload[bytePos++] |= (value >> (numBits - bitOffset)) & bitmasks[bitOffset];
+			payload[bytePos++] |= (value >> (numBits - bitOffset))
+					& bitmasks[bitOffset];
 
 			numBits -= bitOffset;
 		}
@@ -88,7 +86,7 @@ public class PacketBuilder {
 		addInt((int) (val & -1L));
 		return this;
 	}
-	
+
 	public PacketBuilder addBytes(byte[] data, int offset, int len) {
 		int newLength = curLength + len;
 		ensureCapacity(newLength);
@@ -96,7 +94,7 @@ public class PacketBuilder {
 		curLength = newLength;
 		return this;
 	}
-	
+
 	private void ensureCapacity(int minimumCapacity) {
 		if (minimumCapacity >= payload.length)
 			expandCapacity(minimumCapacity);

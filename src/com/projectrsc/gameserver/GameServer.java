@@ -25,19 +25,23 @@ public final class GameServer {
 
 	/**
 	 * The main entry point to the application
-	 * @param args arguments passed into the program
+	 * 
+	 * @param args
+	 *            arguments passed into the program
 	 */
 	public static void main(String[] args) {
 		Constants.printLogo();
 		Settings.loadSettings();
 
-		System.out.println("Starting up " + Settings.NAME + " version " + Settings.VERSION + " on port " + Settings.PORT + "..");
+		System.out.println("Starting up " + Settings.NAME + " version "
+				+ Settings.VERSION + " on port " + Settings.PORT + "..");
 
 		System.out.print("Loading plugins.. ");
 		PluginHandler.getInstance().loadPlugins();
 		System.out.println("Complete!");
-		
-		System.out.println(Settings.NAME + " is now online and ready for connections!");
+
+		System.out.println(Settings.NAME
+				+ " is now online and ready for connections!");
 	}
 
 	/**
@@ -55,14 +59,16 @@ public final class GameServer {
 	private final Channel channel;
 
 	private final ChannelFactory channelFactory;
-	
+
 	private final RSCConnectionHandler connectionHandler = new RSCConnectionHandler();
-	
+
 	private final GameEngine gameEngine = new GameEngine();
 
 	private GameServer() {
-		ExecutorService executorService = Executors.newFixedThreadPool(Settings.CORES * 2);
-		channelFactory = new NioServerSocketChannelFactory(executorService, executorService);
+		ExecutorService executorService = Executors
+				.newFixedThreadPool(Settings.CORES * 2);
+		channelFactory = new NioServerSocketChannelFactory(executorService,
+				executorService);
 
 		ServerBootstrap bootstrap = new ServerBootstrap(channelFactory);
 
@@ -78,11 +84,11 @@ public final class GameServer {
 	public void closeChannel() {
 		channel.close();
 	}
-	
+
 	public RSCConnectionHandler getConnectionHandler() {
 		return connectionHandler;
 	}
-	
+
 	public GameEngine getGameEngine() {
 		return gameEngine;
 	}

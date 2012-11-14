@@ -17,7 +17,7 @@ public final class GameEngine extends Thread {
 		super.setDaemon(true);
 		super.start();
 	}
-	
+
 	@Override
 	public void run() {
 		while (running.get()) {
@@ -30,12 +30,12 @@ public final class GameEngine extends Thread {
 					}
 				}
 			}
-			
+
 			TaskEvent taskEvent = taskEvents.peek();
 			if (taskEvent.satisfied()) {
 				taskEvent.handle();
 				if (taskEvent.remove()) {
-					taskEvents.poll();	
+					taskEvents.poll();
 				}
 			}
 		}
@@ -43,7 +43,9 @@ public final class GameEngine extends Thread {
 
 	/**
 	 * Adds a <code>TaskEvent</code> to a queue
-	 * @param taskEvent The <code>TaskEvent</code> to add
+	 * 
+	 * @param taskEvent
+	 *            The <code>TaskEvent</code> to add
 	 */
 	public void addEvent(TaskEvent taskEvent) {
 		taskEvents.add(taskEvent);

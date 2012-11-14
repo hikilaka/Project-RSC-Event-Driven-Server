@@ -12,8 +12,8 @@ public final class ActionSender {
 	}
 
 	/**
-	 * Sends the player their server index, world width, height
-	 * and their current height
+	 * Sends the player their server index, world width, height and their
+	 * current height
 	 */
 	public void sendWorldInformation() {
 		RSCPacketBuilder builder = new RSCPacketBuilder().setID(131);

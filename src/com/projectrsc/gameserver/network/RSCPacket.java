@@ -5,24 +5,24 @@ import com.projectrsc.shared.network.Session;
 
 public final class RSCPacket extends Packet {
 
-   private final int packetId;
+	private final int packetId;
 
-   public RSCPacket(Session session, int pID, byte[] pData) {
-       this(session, pID, pData, false);
-   }
+	public RSCPacket(Session session, int pID, byte[] pData) {
+		this(session, pID, pData, false);
+	}
 
-   public RSCPacket(Session session, int pID, byte[] pData, boolean bare) {
-       super(session, pData, bare);
-       this.packetId = pID;
-   }
+	public RSCPacket(Session session, int pID, byte[] pData, boolean bare) {
+		super(session, pData, bare);
+		this.packetId = pID;
+	}
 
-   public int getID() {
-       return packetId;
-   }
-   
-   @Override
-   public String toString() {
-	   return "RSCPacket(" + packetId + ")";
-   }
-   
+	public int getID() {
+		return packetId;
+	}
+
+	@Override
+	public String toString() {
+		return "RSCPacket(" + packetId + ")";
+	}
+
 }

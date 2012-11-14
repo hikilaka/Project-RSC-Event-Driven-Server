@@ -49,27 +49,32 @@ public class Packet {
 	public byte readByte() throws PacketReadException {
 		return pData[caret++];
 	}
-	
+
 	public boolean readBoolean() throws PacketReadException {
 		return pData[caret++] == 1;
 	}
-	
+
 	public short readShort() throws PacketReadException {
 		return (short) ((short) ((pData[caret++] & 0xff) << 8) | (short) (pData[caret++] & 0xff));
 	}
 
 	public int readInt() throws PacketReadException {
-		return ((pData[caret++] & 0xff) << 24) | ((pData[caret++] & 0xff) << 16) |
-				((pData[caret++] & 0xff) << 8) | (pData[caret++] & 0xff);
+		return ((pData[caret++] & 0xff) << 24)
+				| ((pData[caret++] & 0xff) << 16)
+				| ((pData[caret++] & 0xff) << 8) | (pData[caret++] & 0xff);
 	}
 
 	public long readLong() throws PacketReadException {
-		return (long) ((long) (pData[caret++] & 0xff) << 56) | ((long) (pData[caret++] & 0xff) << 48) |
-				((long) (pData[caret++] & 0xff) << 40) | ((long) (pData[caret++] & 0xff) << 32) |
-				((long) (pData[caret++] & 0xff) << 24) | ((long) (pData[caret++] & 0xff) << 16) |
-				((long) (pData[caret++] & 0xff) << 8) | ((long) (pData[caret++] & 0xff));
+		return (long) ((long) (pData[caret++] & 0xff) << 56)
+				| ((long) (pData[caret++] & 0xff) << 48)
+				| ((long) (pData[caret++] & 0xff) << 40)
+				| ((long) (pData[caret++] & 0xff) << 32)
+				| ((long) (pData[caret++] & 0xff) << 24)
+				| ((long) (pData[caret++] & 0xff) << 16)
+				| ((long) (pData[caret++] & 0xff) << 8)
+				| ((long) (pData[caret++] & 0xff));
 	}
-	
+
 	public byte[] readBytes(int length) throws PacketReadException {
 		byte[] data = new byte[length];
 		for (int i = 0; i < length; i++) {
@@ -96,5 +101,5 @@ public class Packet {
 	public void skip(int x) {
 		caret += x;
 	}
-	
+
 }

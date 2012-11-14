@@ -28,41 +28,44 @@ public abstract class Entity {
 	/**
 	 * This entity's location
 	 */
-	protected final AtomicReference<Location> location = new AtomicReference<>(DEFAULT_LOCATION);
+	protected final AtomicReference<Location> location = new AtomicReference<>(
+			DEFAULT_LOCATION);
 
 	/**
 	 * This entity's direction
 	 */
 	protected final AtomicInteger direction = new AtomicInteger(0);
 
-public void addEventListener(EventListener<? extends Event> listener) {
-	Set<EventListener<? extends Event>> listeners = eventListeners.get(listener.getClassType());
-	if (listeners == null) {
-		listeners = new HashSet<>();
-		eventListeners.put(listener.getClassType(), listeners);
+	public void addEventListener(EventListener<? extends Event> listener) {
+		Set<EventListener<? extends Event>> listeners = eventListeners
+				.get(listener.getClassType());
+		if (listeners == null) {
+			listeners = new HashSet<>();
+			eventListeners.put(listener.getClassType(), listeners);
+		}
+		listeners.add(listener);
 	}
-	listeners.add(listener);
-}
 
-public void removeEventListener(EventListener<? extends Event> listener) {
-	Set<EventListener<? extends Event>> listeners = eventListeners.get(listener.getClassType());
-	if (listeners != null) {
-		listeners.remove(listener);
+	public void removeEventListener(EventListener<? extends Event> listener) {
+		Set<EventListener<? extends Event>> listeners = eventListeners
+				.get(listener.getClassType());
+		if (listeners != null) {
+			listeners.remove(listener);
+		}
 	}
-}
 
-@SuppressWarnings("unchecked")
-public synchronized <T extends Event> void fireEvent(T event) {
-	Set<EventListener<?>> listeners = eventListeners.get(event.getClass());
-	if (listeners != null) {
-		for (EventListener<? extends Event> listener : listeners) {
-			EventListener<T> eventListener = (EventListener<T>) listener;
-			if (eventListener.satisfied(event)) {
-				eventListener.handle(event);
+	@SuppressWarnings("unchecked")
+	public synchronized <T extends Event> void fireEvent(T event) {
+		Set<EventListener<?>> listeners = eventListeners.get(event.getClass());
+		if (listeners != null) {
+			for (EventListener<? extends Event> listener : listeners) {
+				EventListener<T> eventListener = (EventListener<T>) listener;
+				if (eventListener.satisfied(event)) {
+					eventListener.handle(event);
+				}
 			}
 		}
 	}
-}
 
 	public void setIndex(int index) {
 		this.index.set(index);

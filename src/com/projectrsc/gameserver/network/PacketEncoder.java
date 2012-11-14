@@ -10,8 +10,10 @@ import org.jboss.netty.handler.codec.oneone.OneToOneEncoder;
 public final class PacketEncoder extends OneToOneEncoder {
 
 	@Override
-	protected Object encode(ChannelHandlerContext ctx, Channel channel, Object object) {
-		if (!(object instanceof RSCPacket) && !(object instanceof RSCPacketBuilder)) {
+	protected Object encode(ChannelHandlerContext ctx, Channel channel,
+			Object object) {
+		if (!(object instanceof RSCPacket)
+				&& !(object instanceof RSCPacketBuilder)) {
 			throw new RuntimeException("Wrong packet type!");
 		}
 
@@ -28,7 +30,7 @@ public final class PacketEncoder extends OneToOneEncoder {
 
 		if (!p.isBare()) {
 			buffer = ByteBuffer.allocate(dataLength + 3);
-			byte[] outlen = {(byte) (dataLength >> 8), (byte) (dataLength)};
+			byte[] outlen = { (byte) (dataLength >> 8), (byte) (dataLength) };
 			buffer.put(outlen);
 			int id = p.getID();
 			buffer.put((byte) id);
@@ -41,4 +43,3 @@ public final class PacketEncoder extends OneToOneEncoder {
 		return new ByteBufferBackedChannelBuffer(buffer);
 	}
 }
-

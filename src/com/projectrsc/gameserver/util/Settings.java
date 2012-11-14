@@ -39,7 +39,7 @@ public final class Settings {
 	 * The games world number (used for multiple worlds)
 	 */
 	public static int WORLD = 1;
-	
+
 	/**
 	 * The number of cores Java Virtual Machine has available
 	 */
@@ -49,7 +49,8 @@ public final class Settings {
 	 * Loads settings from the bootstrap
 	 */
 	public static void loadSettings() {
-		try (JsonReader reader = new JsonReader(new InputStreamReader(new FileInputStream("bootstrap.json")))) {
+		try (JsonReader reader = new JsonReader(new InputStreamReader(
+				new FileInputStream("bootstrap.json")))) {
 			reader.beginObject();
 			while (reader.hasNext()) {
 				switch (reader.nextName()) {

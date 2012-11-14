@@ -15,7 +15,8 @@ public final class EntityListIterator<E extends Entity> implements Iterator<E> {
 
 	private int[] indicies;
 
-	public EntityListIterator(Object[] entities, Set<Integer> indicies, EntityList<E> entityList) {
+	public EntityListIterator(Object[] entities, Set<Integer> indicies,
+			EntityList<E> entityList) {
 		this.entities = entities;
 		synchronized (indicies) {
 			this.indicies = new int[indicies.size()];

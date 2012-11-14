@@ -5,9 +5,10 @@ import com.projectrsc.shared.network.PacketReadException;
 import com.projectrsc.shared.network.Session;
 
 public abstract class ClientMessageListener {
-	
+
 	public abstract int[] getAssociatedIds();
-	
-	public abstract void onMessageReceived(Session session, RSCPacket packet) throws PacketReadException;
+
+	public abstract void onMessageReceived(Session session, RSCPacket packet)
+			throws PacketReadException;
 
 }

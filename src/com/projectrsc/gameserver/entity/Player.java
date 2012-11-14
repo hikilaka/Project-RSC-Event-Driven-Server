@@ -12,7 +12,8 @@ public final class Player extends LivingEntity {
 
 	private final String username, password;
 
-	private final AtomicLong lastPing = new AtomicLong(System.currentTimeMillis());
+	private final AtomicLong lastPing = new AtomicLong(
+			System.currentTimeMillis());
 
 	private final ActionSender actionSender = new ActionSender(this);
 
@@ -50,7 +51,8 @@ public final class Player extends LivingEntity {
 		for (Player player : World.getWorld().getPlayers()) {
 			if (player.getIndex() != index.get()) {
 				informOfPlayer(player); // inform this player of that player
-				player.informOfPlayer(this); // inform that player of this player
+				player.informOfPlayer(this); // inform that player of this
+												// player
 			}
 		}
 	}

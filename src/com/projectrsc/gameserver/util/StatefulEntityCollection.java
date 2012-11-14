@@ -9,9 +9,9 @@ import com.projectrsc.gameserver.entity.Entity;
 public final class StatefulEntityCollection<T extends Entity> {
 
 	private final Set<T> entitiesToRemove = new HashSet<>();
-	
+
 	private final Set<T> knownEntities = new HashSet<>();
-	
+
 	private final Set<T> newEntities = new HashSet<>();
 
 	public void add(Collection<T> entities) {
