@@ -108,10 +108,12 @@ public abstract class LivingEntity extends Entity {
 		return watchedPlayers;
 	}
 
-	public void informOfPlayer(Player p) {
-		if ((!watchedPlayers.contains(p) || watchedPlayers.isRemoving(p)) && location.get().withinRange(p.getLocation(), 16, 15)) {
+	public boolean informOfPlayer(Player p) {
+		if (!watchedPlayers.contains(p) && location.get().withinRange(p.getLocation(), 16, 15)) {
 			watchedPlayers.add(p);
+			return true;
 		}
+		return false;
 	}
 
 }

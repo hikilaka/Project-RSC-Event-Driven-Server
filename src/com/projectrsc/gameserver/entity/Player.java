@@ -50,8 +50,10 @@ public final class Player extends LivingEntity {
 	public void loadSurroundingEntities() {
 		for (Player player : World.getWorld().getPlayers()) {
 			if (player.getIndex() != index.get()) {
-				informOfPlayer(player); // inform this player of that player
-				player.informOfPlayer(this); // inform that player of this  player
+				if (informOfPlayer(player)) { // inform this player of that player
+					player.informOfPlayer(this); // inform that player of this  player
+					player.getActionSender().sendNewPlayerPosition(this);
+				}
 			}
 		}
 	}
