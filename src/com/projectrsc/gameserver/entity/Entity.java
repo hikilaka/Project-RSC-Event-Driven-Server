@@ -13,7 +13,7 @@ import com.projectrsc.gameserver.model.Location;
 
 public abstract class Entity {
 
-	private static final Location DEFAULT_LOCATION = new Location(500, 300);
+	private static final Location DEFAULT_LOCATION = new Location(132, 506);
 
 	/**
 	 * A set of listeners that will handle when an event is sent to this entity
@@ -88,11 +88,11 @@ public abstract class Entity {
 		return location.get().getY();
 	}
 
-	public int getDirection() {
+	public int getSprite() {
 		return direction.get();
 	}
 
-	public void setDirection(int direction) {
+	public void setSprite(int direction) {
 		this.direction.set(direction);
 	}
 

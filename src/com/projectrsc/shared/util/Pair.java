@@ -5,27 +5,27 @@ package com.projectrsc.shared.util;
  * @version 1
  * @since 0.1
  */
-public final class Pair<Value1, Value2> {
+public final class Pair<F, S> {
 
-	private final Value1 first;
+	private final F first;
 
-	private final Value2 second;
+	private final S second;
 
-	public Pair(Value1 first, Value2 second) {
+	public Pair(F first, S second) {
 		this.first = first;
 		this.second = second;
 	}
 
-	public Value1 getFirst() {
+	public F getFirst() {
 		return first;
 	}
 
-	public Value2 getSecond() {
+	public S getSecond() {
 		return second;
 	}
 
-	public Pair<Value2, Value1> swapValues() {
-		return new Pair<Value2, Value1>(second, first);
+	public Pair<S, F> swapValues() {
+		return new Pair<S, F>(second, first);
 	}
 
 	@Override

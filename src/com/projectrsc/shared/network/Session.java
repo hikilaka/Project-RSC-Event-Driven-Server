@@ -33,7 +33,9 @@ public final class Session {
 	 *            The object to write
 	 */
 	public void write(Object object) {
-		channel.write(object);
+		if (channel.isWritable()) {
+			channel.write(object);
+		}
 	}
 
 	/**

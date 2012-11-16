@@ -28,7 +28,6 @@ public final class SessionRequestListener extends ClientMessageListener {
 		byte usernameKey = packet.readByte();
 		final Long serverKey = random.nextLong() >> usernameKey;
 
-		// This isn't important enough to use the networking thread pool
 		GameServer.getInstance().getGameEngine().addEvent(new OneTimeEvent() {
 			@Override
 			public void run() {

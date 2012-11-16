@@ -33,6 +33,8 @@ public final class LoginRequestListener extends ClientMessageListener {
 			// or they're requesting to login after already logging in
 			return;
 		}
+		// The server key we assigned when they requested a session
+		final Long serverKey = session.getAttachmentAs(Long.class);
 
 		// The login packet is encrypted with RSA
 		byte[] decryptedData = decryptor.decrypt(packet.getData());
@@ -56,22 +58,28 @@ public final class LoginRequestListener extends ClientMessageListener {
 				byte responseCode = -1;
 				if (clientVersion != Settings.VERSION) {
 					responseCode = 4;
+				} else {
+					// Check to make sure the session keys are correct
+					if (serverKey >> 32 != clientKeys[2] && (serverKey & 0x7fffffff) != clientKeys[3]) {
+						responseCode = 5;
+					}
 				}
 
-				// temporary
 				responseCode = (byte) (reconnecting ? 1 : 0);
 				Player player = EntityFactory.newPlayer(session, username, password);
 				session.setAttachment(player);
-				world.registerPlayer(player); // must be done before sending world info
-				player.getActionSender().sendWorldInformation();
-				player.fireEvent(new LoginAcceptedEvent(player));
-				// end of temp code
+				world.registerPlayer(player);
 
 				if (responseCode != -1) {
 					RSCPacketBuilder pb = new RSCPacketBuilder();
 					pb.setBare(true).addByte(responseCode);
 					session.write(pb.toPacket());
 				}
+
+				player.loadSurroundingEntities();
+				player.getActionSender().sendWorldInformation();
+				player.getActionSender().sendInitialPlayerPositions();
+				player.fireEvent(new LoginAcceptedEvent(player));
 			}
 		});
 	}
